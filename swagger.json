@@ -1,0 +1,14 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "GeoHeart",
+    "description": "Sites of Interest",
+    "version": "1.0.0"
+  },
+  "host": "cse341-geo-heart.onrender.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {}
+}

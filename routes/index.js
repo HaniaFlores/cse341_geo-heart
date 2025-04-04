@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/api-docs', require('./api-docs'));
+router.use('/sites', require('./sites'));
 router.use('/auth', require('./auth'));
 
 module.exports = router;

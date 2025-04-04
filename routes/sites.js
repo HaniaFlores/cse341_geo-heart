@@ -1,11 +1,12 @@
 const router = require('express').Router();
 
+const { siteValidationRules, validate } = require('../middlewares/siteValidator');
 const sitesController = require('../controllers/sites');
 
-router.get('/sites', sitesController.getAll);
-router.get('/sites/:id',  sitesController.getById);
-router.post('/sites', sitesController.store);
-router.put('/sites/:id', sitesController.update);
-router.delete('/sites/:id', sitesController.deleteMovie);
+router.get('/', sitesController.getAll);
+router.get('/:id',  sitesController.getById);
+router.post('/', siteValidationRules(), validate, sitesController.store);
+router.put('/:id', siteValidationRules(), validate, sitesController.update);
+router.delete('/:id', sitesController.deleteSite);
 
 module.exports = router;

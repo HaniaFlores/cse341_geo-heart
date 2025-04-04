@@ -7,5 +7,6 @@ router.get('/', (req, res) => {
 
 router.use('/api-docs', require('./api-docs'));
 router.use('/sites', require('./sites'));
+router.use('/categories', require('./categories'));
 
 module.exports = router;

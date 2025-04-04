@@ -79,8 +79,10 @@ const updateCategory = async (req, res) => {
 
     const categoryName = req.params.name;
 
+    const formattedName = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1).toLowerCase();
+
     const updatedName = {
-        name: req.body.name,
+        name: formattedName,
     };
 
     try {

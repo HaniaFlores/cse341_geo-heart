@@ -1,4 +1,5 @@
 const { body, validationResult } = require('express-validator');
+const mongodb = require('../config/database');
 
 const siteValidationRules = () => {
     return [
@@ -8,7 +9,15 @@ const siteValidationRules = () => {
         body('longitude', 'Longitude must be a decimal number').isFloat(),
         body('city', 'City is required').not().isEmpty(),
         body('country', 'Country is required').not().isEmpty(),
-        body('category', 'Category is required').not().isEmpty(),
+        body('category', 'Category is required')
+            .isAlphanumeric()
+            .custom(async (name) => {
+                const category = await findCategory(name);
+                if (category == null) {
+                    throw new Error('Category does not exist');
+                }
+                return true;
+            }),
     ]
 }
 
@@ -25,6 +34,14 @@ const validate = (req, res, next) => {
     return res.status(422).json({
         errors: extractedErrors,
     });
+}
+
+const findCategory = async (name) => {
+    if (name) {
+        return await mongodb.getDatabase().db().collection('categories')
+            .findOne({name: name});
+    }
+    return null;
 }
 
 module.exports = {

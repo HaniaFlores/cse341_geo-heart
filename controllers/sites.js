@@ -68,6 +68,7 @@ const store = async (req, res) => {
     }
 
     try {
+
         const response = await mongodb.getDatabase()
             .db()
             .collection('sites')

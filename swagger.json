@@ -349,6 +349,20 @@
           }
         }
       }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "OAuth"
+        ],
+        "summary": "Logout",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   }
 }

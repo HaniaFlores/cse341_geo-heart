@@ -3,8 +3,9 @@ const bodyParser = require('body-parser')
 const mongodb = require('./config/database.js');
 const passport = require('passport');
 const session = require('express-session');
-const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
+
+require('./config/passport')(passport);
 
 const app = express();
 
@@ -14,7 +15,7 @@ app
     .use(session({
         secret: 'secret',
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
     }))
     .use(passport.initialize())
     .use(passport.session())
@@ -27,27 +28,6 @@ app
     .use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE', 'PATCH']}))
     .use(cors({origin: '*'}))
     .use('/', require('./routes'));
-
-passport.use(new GitHubStrategy({
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.GITHUB_CLIENT_CALLBACKURL
-    },
-    function (accessToken, refreshToken, profile, done) {
-        // TODO: persist user to mongodb
-        // User.findOrCreate({githubId: profile.id }, function (err, user) {
-        return done(null, profile);
-        // });
-    }));
-
-passport.serializeUser((user, done) => {
-    done(null, user);
-})
-
-passport.deserializeUser((id, done) => {
-    done(null, user);
-})
-
 
 mongodb.initDb((err) => {
     if (err) {

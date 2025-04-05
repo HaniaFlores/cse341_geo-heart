@@ -1,8 +1,8 @@
 const mongodb = require('../config/database');
 
 const getAll = async (_, res) => {
-    //#swagger.tags=['Categories']
-
+    // #swagger.tags=['Categories']
+    // #swagger.summary = 'Get All Categories'
     try {
         const result = await mongodb.getDatabase()
             .db()
@@ -25,7 +25,8 @@ const getAll = async (_, res) => {
 };
 
 const getByName = async (req, res) => {
-    //#swagger.tags=['Categories']
+    // #swagger.tags=['Categories']
+    // #swagger.summary = 'Get A Category'
 
     const categoryName = req.params.name;
 
@@ -49,7 +50,8 @@ const getByName = async (req, res) => {
 };
 
 const createCategory = async (req, res) => {
-    //#swagger.tags=['Categories']
+    // #swagger.tags=['Categories']
+    // #swagger.summary = 'Create A Category'
     const formattedName = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1).toLowerCase();
 
     const category = {
@@ -75,7 +77,8 @@ const createCategory = async (req, res) => {
 };
 
 const updateCategory = async (req, res) => {
-    //#swagger.tags=['Categories']
+    // #swagger.tags=['Categories']
+    // #swagger.summary = 'Rename A Category'
 
     const categoryName = req.params.name;
 
@@ -105,7 +108,8 @@ const updateCategory = async (req, res) => {
 };
 
 const deleteCategory = async (req, res) => {
-    //#swagger.tags=['Categories']
+    // #swagger.tags=['Categories']
+    // #swagger.summary = 'Delete A Category'
 
     const categoryName = req.params.name;
 

@@ -3,7 +3,8 @@ const { ObjectId } = require('mongodb');
 const mongodb = require('../config/database');
 
 const getAll = async (_, res) => {
-    //#swagger.tags=['Sites']
+    // #swagger.tags=['Sites']
+    // #swagger.summary = 'Get A Site List'
 
     try {
         const result = await mongodb.getDatabase()
@@ -27,7 +28,8 @@ const getAll = async (_, res) => {
 };
 
 const getById = async (req, res) => {
-    //#swagger.tags=['Sites']
+    // #swagger.tags=['Sites']
+    // #swagger.summary = 'Get A Site'
 
     if (!ObjectId.isValid(req.params.id)) {
         res.status(400).json('Must use a valid site id to find a site.');
@@ -56,7 +58,8 @@ const getById = async (req, res) => {
 };
 
 const store = async (req, res) => {
-    //#swagger.tags=['Sites']
+    // #swagger.tags=['Sites']
+    // #swagger.summary = 'Create A Site'
     const site = {
         name: req.body.name,
         description: req.body.description,
@@ -87,7 +90,8 @@ const store = async (req, res) => {
 };
 
 const update = async (req, res) => {
-    //#swagger.tags=['Sites']
+    // #swagger.tags=['Sites']
+    // #swagger.summary = 'Update A Site'
 
     if (!ObjectId.isValid(req.params.id)) {
         res.status(400).json('Must use a valid site id to update a site.');
@@ -123,7 +127,8 @@ const update = async (req, res) => {
 };
 
 const deleteSite = async (req, res) => {
-    //#swagger.tags=['Sites']
+    // #swagger.tags=['Sites']
+    // #swagger.summary = 'Delete A Site'
 
     if (!ObjectId.isValid(req.params.id)) {
         res.status(400).json('Must use a valid site id to delete a site.');

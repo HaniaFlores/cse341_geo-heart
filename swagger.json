@@ -16,6 +16,7 @@
         "tags": [
           "Sites"
         ],
+        "summary": "Get A Site List",
         "description": "",
         "produces": [
           "application/json"
@@ -36,6 +37,7 @@
         "tags": [
           "Sites"
         ],
+        "summary": "Create A Site",
         "description": "",
         "parameters": [
           {
@@ -87,6 +89,7 @@
         "tags": [
           "Sites"
         ],
+        "summary": "Get A Site",
         "description": "",
         "produces": [
           "application/json"
@@ -115,6 +118,7 @@
         "tags": [
           "Sites"
         ],
+        "summary": "Update A Site",
         "description": "",
         "parameters": [
           {
@@ -173,6 +177,7 @@
         "tags": [
           "Sites"
         ],
+        "summary": "Delete A Site",
         "description": "",
         "parameters": [
           {
@@ -200,6 +205,7 @@
         "tags": [
           "Categories"
         ],
+        "summary": "Get All Categories",
         "description": "",
         "produces": [
           "application/json"
@@ -220,6 +226,7 @@
         "tags": [
           "Categories"
         ],
+        "summary": "Create A Category",
         "description": "",
         "parameters": [
           {
@@ -253,6 +260,7 @@
         "tags": [
           "Categories"
         ],
+        "summary": "Get A Category",
         "description": "",
         "produces": [
           "application/json"
@@ -284,6 +292,7 @@
         "tags": [
           "Categories"
         ],
+        "summary": "Rename A Category",
         "description": "",
         "parameters": [
           {
@@ -321,6 +330,7 @@
         "tags": [
           "Categories"
         ],
+        "summary": "Delete A Category",
         "description": "",
         "parameters": [
           {

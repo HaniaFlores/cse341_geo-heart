@@ -20,8 +20,8 @@ module.exports = function (passport) {
                 if (found) {
                     done(null, user)
                 } else {
-                    let created = await mongodb.getDatabase().db().collection('users').insertOne(user);
-                    done(null, created)
+                    await mongodb.getDatabase().db().collection('users').insertOne(user);
+                    done(null, user)
                 }
 
             } catch (err) {

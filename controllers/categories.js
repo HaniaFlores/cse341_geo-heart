@@ -114,6 +114,17 @@ const deleteCategory = async (req, res) => {
     const categoryName = req.params.name;
 
     try {
+        const sitesUsingCategory = await mongodb.getDatabase()
+        .db()
+        .collection('sites')
+        .findOne({ category: { $regex: `^${categoryName}$`, $options: 'i' } });
+
+        if (sitesUsingCategory) {
+            return res.status(400).json({
+                error: 'Cannot delete category. There are sites associated with this category.'
+            });
+        }
+
         const response = await mongodb.getDatabase()
             .db()
             .collection('categories')

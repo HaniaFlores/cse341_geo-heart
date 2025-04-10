@@ -3,7 +3,7 @@ const router = require('express').Router();
 router.get('/', (req, res) => {
    // #swagger.ignore = true
    res.send(req.session.user !== undefined
-       ? `Logged in as ${req.session.user.displayName}`
+       ? `Logged in as ${req.session.user.name} (${req.session.user.username})`
        : 'Logged out');
 });
 

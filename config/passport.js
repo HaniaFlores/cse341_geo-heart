@@ -9,14 +9,14 @@ module.exports = function (passport) {
         },
         async (accessToken, refreshToken, profile, done) => {
             const user = {
-                githubId: profile.id,
-                username: profile.username,
-                name: profile.displayName,
+                username: profile.username.toLowerCase(),
+                displayName: profile.displayName,
                 email: profile.email
             }
 
             try {
-                let found = await mongodb.getDatabase().db().collection('users').findOne({githubId: profile.id});
+                let found = await mongodb.getDatabase().db().collection('users')
+                    .findOne({username: profile.username.toLowerCase()});
                 if (found) {
                     done(null, user)
                 } else {
@@ -30,12 +30,12 @@ module.exports = function (passport) {
         }));
 
     passport.serializeUser((user, done) => {
-        done(null, user.id);
+        done(null, user.username);
     });
 
-    passport.deserializeUser(async (id, done) => {
+    passport.deserializeUser(async (username, done) => {
         const found = await mongodb.getDatabase().db().collection('users')
-            .findOne({githubId: id});
+            .findOne({username: username});
         done(null, found);
     });
 }

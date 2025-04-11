@@ -1,3 +1,5 @@
+const { route } = require('./reviews');
+
 const router = require('express').Router();
 
 router.get('/', (req, res) => {
@@ -11,6 +13,7 @@ router.use('/api-docs', require('./api-docs'));
 router.use('/sites', require('./sites'));
 router.use('/categories', require('./categories'));
 router.use('/auth', require('./auth'));
+router.use('/reviews', require('./reviews'));
 router.use('/users', require('./users'));
 
 module.exports = router;

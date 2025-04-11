@@ -27,7 +27,11 @@ app
     })
     .use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE', 'PATCH']}))
     .use(cors({origin: '*'}))
-    .use('/', require('./routes'));
+    .use('/', require('./routes'))
+    .use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).send('Something broke!');
+    });
 
 mongodb.initDb((err) => {
     if (err) {

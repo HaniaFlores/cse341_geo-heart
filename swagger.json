@@ -5,10 +5,10 @@
     "description": "Sites of Interest",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341-geo-heart.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/sites/": {
@@ -449,7 +449,7 @@
         }
       }
     },
-    "/users/{name}": {
+    "/users/{username}": {
       "get": {
         "tags": [
           "Users"
@@ -461,7 +461,7 @@
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "username",
             "in": "path",
             "required": true,
             "type": "string"
@@ -490,7 +490,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "name",
+            "name": "username",
             "in": "path",
             "required": true,
             "type": "string"
@@ -521,6 +521,9 @@
           "401": {
             "description": "Unauthorized"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -534,7 +537,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "name",
+            "name": "username",
             "in": "path",
             "required": true,
             "type": "string"

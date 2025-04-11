@@ -10,11 +10,19 @@ const getAll = async (req, res) => {
         return res.status(400).json('Must use a valid site id to find reviews.');
     }
 
+    const currentUser = req.session.user?.name;
+
     try {
         const result = await mongodb.getDatabase()
             .db()
             .collection('reviews')
-            .find({ siteId: new ObjectId(siteId) });
+            .find({
+                siteId: new ObjectId(siteId),
+                $or: [
+                    { author: currentUser },
+                    { isPrivate: false }
+                ]
+            });
 
         const reviews = await result.toArray();
 
@@ -57,9 +65,9 @@ const createReview = async (req, res) => {
     // #swagger.tags=['Reviews']
     // #swagger.summary = 'Create A Review'
 
-    const { siteId, text, author, rating, isPrivate } = req.body;
+    const { siteId, text, rating, isPrivate } = req.body;
     const parsedRating = parseInt(rating);
-    // const author = req.user.username;
+    const author = req.session.user?.name;
 
     try {
         const siteExists = await mongodb.getDatabase()

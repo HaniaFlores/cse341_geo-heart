@@ -9,9 +9,8 @@ module.exports = function (passport) {
     },
         async (accessToken, refreshToken, profile, done) => {
             const user = {
-                githubId: profile.id,
-                username: profile.username,
-                name: profile.displayName,
+                username: profile.username.toLowerCase(),
+                displayName: profile.displayName,
                 email: profile.email
             }
 
@@ -30,7 +29,7 @@ module.exports = function (passport) {
         }));
 
     passport.serializeUser((user, done) => {
-        done(null, user.id);
+        done(null, user.username);
     });
 
     passport.deserializeUser(async (id, done) => {

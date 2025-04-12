@@ -1,11 +1,19 @@
 const { check, validationResult } = require('express-validator');
+const mongodb = require('../config/database');
 const { ObjectId } = require('mongodb');
 
 const validateReview = () => [
     check('rating')
         .optional()
-        .isInt({ min: 1, max: 5 })
-        .withMessage('Rating must be an integer between 1 and 5.'),
+        .customSanitizer(value => Number(value))
+        .custom(value => {
+            if (!Number.isInteger(value) || value < 1 || value > 5) {
+                throw new Error('Rating must be an integer between 1 and 5.');
+            }
+            return true;
+        }),
+
+
 
     check('isPrivate')
         .optional()
@@ -39,7 +47,7 @@ const validate = async (req, res, next) => {
 
 const verifyReviewOwnership = async (req, res, next) => {
     const reviewId = req.params.id;
-    const currentUser = req.user?.username;
+    const currentUser = req.session.user?.username;
 
     if (!ObjectId.isValid(reviewId)) {
         return res.status(400).json({ message: 'Invalid review ID.' });
@@ -47,7 +55,6 @@ const verifyReviewOwnership = async (req, res, next) => {
 
     try {
         const review = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .findOne({ _id: new ObjectId(reviewId) });
 

@@ -10,11 +10,10 @@ const getAll = async (req, res) => {
         return res.status(400).json('Must use a valid site id to find reviews.');
     }
 
-    const currentUser = req.session.user?.name;
+    const currentUser = req.session.user?.username;
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .find({
                 siteId: new ObjectId(siteId),
@@ -26,11 +25,11 @@ const getAll = async (req, res) => {
 
         const reviews = await result.toArray();
 
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(reviews);
-        } catch (err) {
-            res.status(500).json(err || 'Some error occurred. Please try again.');
-        }
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(reviews);
+    } catch (err) {
+        res.status(500).json(err || 'Some error occurred. Please try again.');
+    }
 };
 
 const getSingle = async (req, res) => {
@@ -45,7 +44,6 @@ const getSingle = async (req, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .find({ _id: new ObjectId(reviewId) })
             .toArray();
@@ -67,11 +65,10 @@ const createReview = async (req, res) => {
 
     const { siteId, text, rating, isPrivate } = req.body;
     const parsedRating = parseInt(rating);
-    const author = req.session.user?.name;
+    const author = req.session.user?.username;
 
     try {
         const siteExists = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .findOne({ _id: new ObjectId(siteId) });
 
@@ -88,12 +85,11 @@ const createReview = async (req, res) => {
         };
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .insertOne(review);
 
         if (response.acknowledged) {
-            res.status(201).json({ message: 'Review created successfully.', id: response.insertedId });
+            res.status(201).json({ message: 'Review created successfully.' });
         } else {
             res.status(500).json(response.error || 'Some error occurred while creating the review.');
         }
@@ -117,7 +113,6 @@ const updateReview = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .updateOne(
                 { _id: new ObjectId(reviewId) },
@@ -146,7 +141,6 @@ const deleteReview = async (req, res) => {
 
     try {
         const review = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .findOne({ _id: new ObjectId(reviewId) });
 
@@ -155,7 +149,6 @@ const deleteReview = async (req, res) => {
         }
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .deleteOne({ _id: new ObjectId(reviewId) });
 

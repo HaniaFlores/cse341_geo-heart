@@ -22,7 +22,6 @@ const validate = async (req, res, next) => {
 
     try {
         const existingCategory = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .findOne({ name: { $regex: `^${req.body.name}$`, $options: 'i' } });
 
@@ -37,7 +36,7 @@ const validate = async (req, res, next) => {
 };
 
 
-module.exports = { 
+module.exports = {
     categoryValidationRules,
-    validate 
+    validate
 };

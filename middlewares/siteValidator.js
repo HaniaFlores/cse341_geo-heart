@@ -38,8 +38,8 @@ const validate = (req, res, next) => {
 
 const findCategory = async (name) => {
     if (name) {
-        return await mongodb.getDatabase().db().collection('categories')
-            .findOne({name: name});
+        return await mongodb.getDatabase().collection('categories')
+            .findOne({ name: name });
     }
     return null;
 }

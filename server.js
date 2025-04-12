@@ -33,12 +33,18 @@ app
         res.status(500).send('Something broke!');
     });
 
-mongodb.initDb((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        app.listen(port, () => {
-            console.log(`Database is listening and node Running on port ${port}`)
-        });
-    }
-});
+mongodb.initDb()
+    .then(() => {
+        console.log('Database connection estabilished.');
+    })
+    .catch((err) => {
+        console.error('Failed to connect to database:', err);
+        process.exit(1);
+    });
+
+if (require.main === module) {
+    app.listen(port, () => console.log(`Server is running on port ${port}`));
+}
+
+
+module.exports = app;

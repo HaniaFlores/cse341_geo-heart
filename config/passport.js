@@ -3,10 +3,10 @@ const mongodb = require('./database.js');
 
 module.exports = function (passport) {
     passport.use(new GitHubStrategy({
-            clientID: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: process.env.GITHUB_CLIENT_CALLBACKURL
-        },
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CLIENT_CALLBACKURL
+    },
         async (accessToken, refreshToken, profile, done) => {
             const user = {
                 username: profile.username.toLowerCase(),
@@ -15,12 +15,11 @@ module.exports = function (passport) {
             }
 
             try {
-                let found = await mongodb.getDatabase().db().collection('users')
-                    .findOne({username: profile.username.toLowerCase()});
+                let found = await mongodb.getDatabase().collection('users').findOne({ githubId: profile.id });
                 if (found) {
                     done(null, user)
                 } else {
-                    await mongodb.getDatabase().db().collection('users').insertOne(user);
+                    await mongodb.getDatabase().collection('users').insertOne(user);
                     done(null, user)
                 }
 
@@ -33,9 +32,9 @@ module.exports = function (passport) {
         done(null, user.username);
     });
 
-    passport.deserializeUser(async (username, done) => {
-        const found = await mongodb.getDatabase().db().collection('users')
-            .findOne({username: username});
+    passport.deserializeUser(async (id, done) => {
+        const found = await mongodb.getDatabase().collection('users')
+            .findOne({ githubId: id });
         done(null, found);
     });
 }

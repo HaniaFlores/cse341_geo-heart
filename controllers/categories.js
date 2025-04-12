@@ -5,7 +5,6 @@ const getAll = async (_, res) => {
     // #swagger.summary = 'Get All Categories'
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .find();
 
@@ -29,23 +28,22 @@ const getByName = async (req, res) => {
     // #swagger.summary = 'Get A Category'
 
     const categoryName = req.params.name;
+    if (!categoryName) {
+    return res.status(400).json({ message: 'Missing name query parameter.' });
+    }
 
     try {
-        const result = await mongodb.getDatabase()
-            .db()
-            .collection('categories')
-            .findOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } });
+    const result = await mongodb.getDatabase()
+    .collection('categories')
+    .findOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } });
 
-        if (!result) {
-            return res.status(404).json({ message: 'Category not found.' });
-        }
+    if (!result) {
+        return res.status(404).json({ message: 'Category not found.' });
+    }
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(result);
-
+    res.status(200).json([result]);
     } catch (err) {
-        res.status(500)
-            .json(err || 'Some error occurred. Please try again.');
+    res.status(500).json(err || 'Some error occurred. Please try again.');
     }
 };
 
@@ -60,12 +58,11 @@ const createCategory = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .insertOne(category);
 
         if (response.acknowledged) {
-            res.status(204).send();
+            res.status(200).send();
         } else {
             res.status(500)
                 .json(response.error || 'Some error occurred while creating the category.');
@@ -90,7 +87,6 @@ const updateCategory = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .replaceOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } },
                 updatedName);
@@ -115,9 +111,8 @@ const deleteCategory = async (req, res) => {
 
     try {
         const sitesUsingCategory = await mongodb.getDatabase()
-        .db()
-        .collection('sites')
-        .findOne({ category: { $regex: `^${categoryName}$`, $options: 'i' } });
+            .collection('sites')
+            .findOne({ category: { $regex: `^${categoryName}$`, $options: 'i' } });
 
         if (sitesUsingCategory) {
             return res.status(400).json({
@@ -126,7 +121,6 @@ const deleteCategory = async (req, res) => {
         }
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .deleteOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } });
 

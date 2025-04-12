@@ -8,7 +8,6 @@ const getAll = async (_, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .find();
 
@@ -34,23 +33,19 @@ const getById = async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.status(400).json('Must use a valid site id to find a site.');
     }
-    const siteId = new ObjectId(req.params['id']);
+    const siteId = new ObjectId(req.params.id);
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('sites')
-            .find({ _id: siteId });
+            .findOne({ _id: siteId });
 
-        result
-            .toArray()
-            .then((sites) => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200).json(sites[0]);
-            })
-            .catch((err) => {
-                res.status(400).json({ message: err });
-            });
+        if (result == null) {
+            res.status(404).json('Site not found.');
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(result);
+        }
     } catch (err) {
         res.status(500)
             .json(err || 'Some error occurred. Please try again.');
@@ -73,7 +68,6 @@ const store = async (req, res) => {
     try {
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .insertOne(site);
 
@@ -110,9 +104,8 @@ const update = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
-            .replaceOne({ _id: siteId}, site);
+            .replaceOne({ _id: siteId }, site);
 
         if (response.modifiedCount > 0) {
             res.status(204).send();
@@ -137,9 +130,8 @@ const deleteSite = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
-            .deleteOne({ _id: siteId}, true);
+            .deleteOne({ _id: siteId }, true);
 
         if (response.deletedCount > 0) {
             res.status(204).send();

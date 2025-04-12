@@ -10,7 +10,7 @@ const getAll = async (req, res) => {
         return res.status(400).json('Must use a valid site id to find reviews.');
     }
 
-    const currentUser = req.session.user?.name;
+    const currentUser = req.session.user?.username;
 
     try {
         const result = await mongodb.getDatabase()
@@ -67,7 +67,7 @@ const createReview = async (req, res) => {
 
     const { siteId, text, rating, isPrivate } = req.body;
     const parsedRating = parseInt(rating);
-    const author = req.session.user?.name;
+    const author = req.session.user?.username;
 
     try {
         const siteExists = await mongodb.getDatabase()
@@ -93,7 +93,7 @@ const createReview = async (req, res) => {
             .insertOne(review);
 
         if (response.acknowledged) {
-            res.status(201).json({ message: 'Review created successfully.', id: response.insertedId });
+            res.status(201).json({ message: 'Review created successfully.'});
         } else {
             res.status(500).json(response.error || 'Some error occurred while creating the review.');
         }

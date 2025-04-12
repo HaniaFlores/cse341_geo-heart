@@ -20,6 +20,7 @@ describe('GET /categories', () => {
         expect(res.statusCode).toBe(200);
         expect(Array.isArray(res.body)).toBe(true);
     });
+
     test('should return a category by name', async () => {
         const res = await request.get('/categories/Fun');
         expect(res.statusCode).toBe(200);
@@ -27,15 +28,11 @@ describe('GET /categories', () => {
         expect(res.body.length).toBeGreaterThan(0);
         expect(res.body[0].name).toBe('Fun');
     });
+
     test('should return 404 for non-existing category name', async () => {
         const res = await request.get('/categories/fakeCategory');
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe('Category not found.');
-    });
-    test('should return all categories when name path param is missing', async () => {
-        const res = await request.get('/categories');
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
     });
 });
 
@@ -70,10 +67,25 @@ describe('GET /sites', () => {
         expect(res.statusCode).toBe(400);
         expect(res.body).toBe('Must use a valid site id to find a site.');
     });
+});
 
-    test('should return all sites when name path param is missing', async () => {
-        const res = await request.get('/sites');
+describe('GET /users', () => {
+    test('should return all users', async () => {
+        const res = await request.get('/users');
         expect(res.statusCode).toBe(200);
         expect(Array.isArray(res.body)).toBe(true);
+    });
+
+    test('should return a user by username', async () => {
+        const username = 'ross-owen'
+        const res = await request.get(`/users/${username}`);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.username).toBe(username);
+    });
+
+    test('should return 404 for non-existing user name', async () => {
+        const res = await request.get('/users/fakeUser');
+        expect(res.statusCode).toBe(404);
+        expect(res.body.message).toBe('User not found.');
     });
 });

@@ -4,10 +4,7 @@ const getAll = async (_, res) => {
     // #swagger.tags=['Users']
     // #swagger.summary = 'Get All Users'
     try {
-        const result = await mongodb.getDatabase()
-            .db()
-            .collection('users')
-            .find();
+        const result = await mongodb.getDatabase().collection('users').find();
 
         result
             .toArray()
@@ -35,7 +32,6 @@ const getByUsername = async (req, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('users')
             .findOne({username: username.toLowerCase()});
 
@@ -64,7 +60,6 @@ const createUser = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('users')
             .insertOne(user);
 
@@ -91,7 +86,6 @@ const updateUser = async (req, res) => {
 
     try {
         const found = await mongodb.getDatabase()
-            .db()
             .collection('users')
             .findOne({username: username.toLowerCase()});
 
@@ -106,7 +100,6 @@ const updateUser = async (req, res) => {
         }
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('users')
             .replaceOne({username: username.toLowerCase()}, user);
 
@@ -133,7 +126,6 @@ const deleteUser = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('users')
             .deleteOne({username: username.toLowerCase()});
 

@@ -4,14 +4,14 @@ const { ObjectId } = require('mongodb');
 
 const validateReview = () => [
     check('rating')
-    .optional()
-    .customSanitizer(value => Number(value))
-    .custom(value => {
-        if (!Number.isInteger(value) || value < 1 || value > 5) {
-            throw new Error('Rating must be an integer between 1 and 5.');
-        }
-        return true;
-    }),
+        .optional()
+        .customSanitizer(value => Number(value))
+        .custom(value => {
+            if (!Number.isInteger(value) || value < 1 || value > 5) {
+                throw new Error('Rating must be an integer between 1 and 5.');
+            }
+            return true;
+        }),
 
 
 
@@ -55,7 +55,6 @@ const verifyReviewOwnership = async (req, res, next) => {
 
     try {
         const review = await mongodb.getDatabase()
-            .db()
             .collection('reviews')
             .findOne({ _id: new ObjectId(reviewId) });
 

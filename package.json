@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "jest": {
-    "preset": "@shelf/jest-mongodb"
-  },
   "scripts": {
     "test": "jest",
     "dev": "nodemon server.js",

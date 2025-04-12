@@ -8,7 +8,6 @@ const getAll = async (_, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .find();
 
@@ -38,7 +37,6 @@ const getById = async (req, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .find({ _id: siteId });
 
@@ -73,7 +71,6 @@ const store = async (req, res) => {
     try {
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
             .insertOne(site);
 
@@ -110,9 +107,8 @@ const update = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
-            .replaceOne({ _id: siteId}, site);
+            .replaceOne({ _id: siteId }, site);
 
         if (response.modifiedCount > 0) {
             res.status(204).send();
@@ -137,9 +133,8 @@ const deleteSite = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('sites')
-            .deleteOne({ _id: siteId}, true);
+            .deleteOne({ _id: siteId }, true);
 
         if (response.deletedCount > 0) {
             res.status(204).send();

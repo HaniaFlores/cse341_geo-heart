@@ -5,7 +5,6 @@ const getAll = async (_, res) => {
     // #swagger.summary = 'Get All Categories'
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .find();
 
@@ -32,7 +31,6 @@ const getByName = async (req, res) => {
 
     try {
         const result = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .findOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } });
 
@@ -60,7 +58,6 @@ const createCategory = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .insertOne(category);
 
@@ -90,7 +87,6 @@ const updateCategory = async (req, res) => {
 
     try {
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .replaceOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } },
                 updatedName);
@@ -115,9 +111,8 @@ const deleteCategory = async (req, res) => {
 
     try {
         const sitesUsingCategory = await mongodb.getDatabase()
-        .db()
-        .collection('sites')
-        .findOne({ category: { $regex: `^${categoryName}$`, $options: 'i' } });
+            .collection('sites')
+            .findOne({ category: { $regex: `^${categoryName}$`, $options: 'i' } });
 
         if (sitesUsingCategory) {
             return res.status(400).json({
@@ -126,7 +121,6 @@ const deleteCategory = async (req, res) => {
         }
 
         const response = await mongodb.getDatabase()
-            .db()
             .collection('categories')
             .deleteOne({ name: { $regex: `^${categoryName}$`, $options: 'i' } });
 

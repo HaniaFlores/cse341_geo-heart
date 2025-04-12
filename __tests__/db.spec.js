@@ -12,12 +12,16 @@ afterAll(async () => {
     await client.close();
 });
 
+function randomInt() {
+    return Math.floor(Math.random() * 1000);
+}
+
 describe('DB CRUD', () => {
 
     test('CRUD Categories', async () => {
         const categories = await client.db().collection('categories')
-        const name = 'FAKE_CATEGORY';
-        const renamed = 'FAKE_CATEGORY_2';
+        const name = 'FAKE_CATEGORY_' + randomInt();
+        const renamed = 'FAKE_CATEGORY_' + randomInt();
 
         try {
             const category = {name: name};
@@ -49,8 +53,8 @@ describe('DB CRUD', () => {
 
     test('CRUD Sites', async () => {
         const sites = await client.db().collection('sites')
-        const name = 'FAKE_SITE';
-        const renamed = 'FAKE_SITE_2';
+        const name = 'FAKE_SITE_' + randomInt();
+        const renamed = 'FAKE_SITE_' + randomInt();
 
         try {
             const site = {
@@ -71,7 +75,7 @@ describe('DB CRUD', () => {
 
             // UPDATE
             site.name = renamed;
-            sites.replaceOne({name: name}, site);
+            await sites.replaceOne({name: name}, site);
 
             // LIST
             const list = (await (await sites.find()).toArray()).filter(c => c.name === renamed);
@@ -79,10 +83,10 @@ describe('DB CRUD', () => {
             expect(list[0]).toEqual(site);
         } finally {
             // DELETE
-            sites.deleteMany({name: name});
+            await sites.deleteMany({name: name});
             let found = await sites.findOne({name: name});
             expect(found).toEqual(null);
-            sites.deleteMany({name: renamed});
+            await sites.deleteMany({name: renamed});
             found = await sites.findOne({name: renamed});
             expect(found).toEqual(null);
         }
@@ -90,8 +94,8 @@ describe('DB CRUD', () => {
 
     test('CRUD Users', async () => {
         const users = await client.db().collection('users')
-        const username = 'FAKE_USER_' + Math.random();
-        const renamed = 'FAKE_USER_' + Math.random();
+        const username = 'FAKE_USER_' + randomInt();
+        const renamed = 'FAKE_USER_' + randomInt();
 
         try {
             const user = {
@@ -108,18 +112,20 @@ describe('DB CRUD', () => {
 
             // UPDATE
             user.username = renamed;
-            users.replaceOne({username: username}, user);
+            await users.replaceOne({username: username}, user);
 
             // LIST
-            const list = (await (await users.find()).toArray()).filter(c => c.username === renamed);
+            let result = await users.find();
+            let userList = await result.toArray();
+            const list = userList.filter(c => c.username === renamed);
             expect(list.length).toEqual(1);
             expect(list[0]).toEqual(user);
         } finally {
             // DELETE
-            users.deleteMany({username: username});
+            await users.deleteMany({username: username});
             let found = await users.findOne({username: username});
             expect(found).toEqual(null);
-            users.deleteMany({username: renamed});
+            await users.deleteMany({username: renamed});
             found = await users.findOne({username: renamed});
             expect(found).toEqual(null);
         }

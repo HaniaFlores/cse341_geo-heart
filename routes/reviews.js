@@ -5,7 +5,7 @@ const { validateReview, validate, verifyReviewOwnership } = require('../middlewa
 const {isAuthenticated} = require('../middlewares/authentication');
 
 router.get('/', reviewsController.getAll);
-router.get('/:id', verifyReviewOwnership, validateReview(), validate, reviewsController.getSingle);
+router.get('/:id', reviewsController.getSingle);
 router.post('/', isAuthenticated, validateReview(), validate, reviewsController.createReview);
 router.put('/:id', isAuthenticated, verifyReviewOwnership, validateReview(), validate, reviewsController.updateReview);
 router.delete('/:id', isAuthenticated, verifyReviewOwnership, reviewsController.deleteReview);

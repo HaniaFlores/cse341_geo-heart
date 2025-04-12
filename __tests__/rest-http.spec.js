@@ -89,3 +89,37 @@ describe('GET /users', () => {
         expect(res.body.message).toBe('User not found.');
     });
 });
+
+describe('GET /reviews', () => {
+    test('should return all reviews by siteId', async () => {
+        const siteId = '67f0a3a60fe3c270e3c39492';
+        const res = await request.get(`/reviews?siteId=${siteId}`);
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        res.body.forEach(review => {
+            expect(review.siteId).toBe(siteId);
+        });
+    });
+
+    test('should return 404 for non-existing siteId', async () => {
+        const fakeSiteId = 'nonExistingSiteId';
+        const res = await request.get(`/reviews?siteId=${fakeSiteId}`);
+        expect(res.statusCode).toBe(400);
+        expect(res.body.message).toBe('Invalid siteId.');
+    });
+
+    test('should return a review by ID', async () => {
+        const reviewId = '67fa6fed6b14a6947b5878d8';
+        const res = await request.get(`/reviews/${reviewId}`);
+        expect(res.statusCode).toBe(200);
+        expect(res.body._id).toBe(reviewId);
+    });
+
+    test('should return 404 for non-existing review ID', async () => {
+        const fakeId = new ObjectId();
+        const res = await request.get(`/reviews/${fakeId}`);
+        expect(res.statusCode).toBe(404);
+        expect(res.body.message).toBe('Review not found.');
+    });
+});
+

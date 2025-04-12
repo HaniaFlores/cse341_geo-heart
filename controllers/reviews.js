@@ -7,7 +7,7 @@ const getAll = async (req, res) => {
     const siteId = req.query.siteId;
 
     if (!ObjectId.isValid(siteId)) {
-        return res.status(400).json('Must use a valid site id to find reviews.');
+        return res.status(400).json({ message: 'Invalid siteId.' });
     }
 
     const currentUser = req.session.user?.username;
@@ -37,27 +37,36 @@ const getSingle = async (req, res) => {
     // #swagger.summary = 'Get A Single Review By Id'
 
     const reviewId = req.params.id;
+    const currentUser = req.session.user?.username;
 
     if (!ObjectId.isValid(reviewId)) {
-        return res.status(400).json('Must use a valid review id to find the review.');
+        return res.status(400).json({ message: 'Invalid review ID.' });
     }
 
     try {
-        const result = await mongodb.getDatabase()
+        const review = await mongodb.getDatabase()
             .collection('reviews')
-            .find({ _id: new ObjectId(reviewId) })
-            .toArray();
+            .findOne({ _id: new ObjectId(reviewId) });
 
-        if (result.length === 0) {
+        if (!review) {
             return res.status(404).json({ message: 'Review not found.' });
         }
 
+        const isOwner = review.author === currentUser;
+        const isPublic = review.isPrivate === false;
+
+        if (!isOwner && !isPublic) {
+            return res.status(403).json({ message: 'You are not authorized to access this review.' });
+        }
+
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(result[0]);  // Return the first result since `find` returns an array
+        res.status(200).json(review);
     } catch (err) {
-        res.status(500).json(err || 'Some error occurred. Please try again.');
+        console.error('Error in GET /reviews/:id:', err);
+        res.status(500).json({ message: 'Internal server error.', error: err });
     }
 };
+
 
 const createReview = async (req, res) => {
     // #swagger.tags=['Reviews']

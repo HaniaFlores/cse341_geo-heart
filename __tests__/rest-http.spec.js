@@ -65,7 +65,7 @@ describe('GET /sites', () => {
     test('should return 404 for bogus site id', async () => {
         const res = await request.get('/sites/bogusid');
         expect(res.statusCode).toBe(400);
-        expect(res.body).toBe('Must use a valid site id to find a site.');
+        expect(res.body).toEqual('Must use a valid site id to find a site.');
     });
 });
 

@@ -470,7 +470,7 @@
         "summary": "Get A Single Review By Id",
         "description": "",
         "produces": [
-          "application/json"
+          "application/json'); res.status(200).json(review); } catch (err) { console.error('Error in GET /reviews/:id:"
         ],
         "parameters": [
           {

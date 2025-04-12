@@ -9,13 +9,15 @@ module.exports = function (passport) {
     },
         async (accessToken, refreshToken, profile, done) => {
             const user = {
+                githubId: profile.id,
                 username: profile.username.toLowerCase(),
                 displayName: profile.displayName,
                 email: profile.email
             }
 
             try {
-                let found = await mongodb.getDatabase().collection('users').findOne({ githubId: profile.id });
+                let found = await mongodb.getDatabase().collection('users')
+                    .findOne({ username: user.username });
                 if (found) {
                     done(null, user)
                 } else {

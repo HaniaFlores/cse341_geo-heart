@@ -3,7 +3,7 @@ const mongodb = require('../config/database');
 
 async function findUser(username) {
     if (username) {
-        return await mongodb.getDatabase().db().collection('users')
+        return await mongodb.getDatabase().collection('users')
             .findOne({username: username.toLowerCase()});
     }
     return null;

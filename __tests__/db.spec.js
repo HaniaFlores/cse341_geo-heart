@@ -45,7 +45,7 @@ describe('DB CRUD', () => {
             categories.deleteMany({name: name});
             let found = await categories.findOne({name: name});
             expect(found).toEqual(null);
-            categories.deleteMany({name: renamed});
+            await categories.deleteMany({name: renamed});
             found = await categories.findOne({name: renamed});
             expect(found).toEqual(null);
         }

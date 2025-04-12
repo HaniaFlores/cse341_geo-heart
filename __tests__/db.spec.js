@@ -34,7 +34,7 @@ describe('DB CRUD', () => {
 
             // UPDATE
             category.name = renamed;
-            categories.replaceOne({name: name}, category);
+            await categories.replaceOne({name: name}, category);
 
             // LIST
             const list = (await (await categories.find()).toArray()).filter(c => c.name === renamed);

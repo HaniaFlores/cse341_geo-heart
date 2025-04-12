@@ -130,4 +130,44 @@ describe('DB CRUD', () => {
             expect(found).toEqual(null);
         }
     });
+
+    test('CRUD Reviews', async () => {
+        const reviews = await client.db().collection('reviews')
+        const text = 'FAKE_REVIEW_' + randomInt();
+        const renamed = 'FAKE_REVIEW_' + randomInt();
+
+        try {
+            const review = {
+                text: text,
+                author: 'Testing Author',
+                rating: 3,
+                isPrivate: false
+            }
+            // CREATE
+            await reviews.insertOne(review);
+
+            // READ
+            const inserted = await reviews.findOne({text: text});
+            expect(inserted).toEqual(review);
+
+            // UPDATE
+            review.text = renamed;
+            await reviews.replaceOne({text: text}, review);
+
+            // LIST
+            let result = await reviews.find();
+            let userList = await result.toArray();
+            const list = userList.filter(c => c.text === renamed);
+            expect(list.length).toEqual(1);
+            expect(list[0]).toEqual(review);
+        } finally {
+            // DELETE
+            await reviews.deleteMany({text: text});
+            let found = await reviews.findOne({text: text});
+            expect(found).toEqual(null);
+            await reviews.deleteMany({text: renamed});
+            found = await reviews.findOne({text: renamed});
+            expect(found).toEqual(null);
+        }
+    });
 });

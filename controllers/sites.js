@@ -33,22 +33,19 @@ const getById = async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.status(400).json('Must use a valid site id to find a site.');
     }
-    const siteId = new ObjectId(req.params['id']);
+    const siteId = new ObjectId(req.params.id);
 
     try {
         const result = await mongodb.getDatabase()
             .collection('sites')
-            .find({ _id: siteId });
+            .findOne({ _id: siteId });
 
-        result
-            .toArray()
-            .then((sites) => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200).json(sites[0]);
-            })
-            .catch((err) => {
-                res.status(400).json({ message: err });
-            });
+        if (result == null) {
+            res.status(404).json('Site not found.');
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(result);
+        }
     } catch (err) {
         res.status(500)
             .json(err || 'Some error occurred. Please try again.');

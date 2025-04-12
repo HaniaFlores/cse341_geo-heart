@@ -43,8 +43,7 @@ const getByUsername = async (req, res) => {
         res.status(200).json(result);
 
     } catch (err) {
-        res.status(500)
-            .json(err || 'Some error occurred. Please try again.');
+        res.status(500).json(err || 'Some error occurred. Please try again.');
     }
 };
 
@@ -54,7 +53,7 @@ const createUser = async (req, res) => {
 
     const user = {
         username: req.body.username,
-        name: req.body.displayName,
+        displayName: req.body.displayName,
         email: req.body.email
     }
 
@@ -66,12 +65,10 @@ const createUser = async (req, res) => {
         if (response.acknowledged) {
             res.status(204).send();
         } else {
-            res.status(500)
-                .json(response.error || 'Some error occurred while creating the user.');
+            res.status(500).json(response.error || 'Some error occurred while creating the user.');
         }
     } catch (err) {
-        res.status(500)
-            .json(err || 'Some error occurred. Please try again.');
+        res.status(500).json(err || 'Some error occurred. Please try again.');
     }
 };
 

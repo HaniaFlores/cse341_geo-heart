@@ -34,7 +34,7 @@ module.exports = function (passport) {
 
     passport.deserializeUser(async (id, done) => {
         const found = await mongodb.getDatabase().collection('users')
-            .findOne({ githubId: id });
+            .findOne({ username: id });
         done(null, found);
     });
 }
